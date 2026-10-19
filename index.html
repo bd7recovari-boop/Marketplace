@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Aurevia | Your space, Your future.</title>
+        <meta name="description" content="Find a place to call yours. Discover property across Nigeria with Aurevia.">
+    <meta name="theme-color" content="#173b31">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="aurevia.css">
+    <script type="module" src="aurevia.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#home" aria-label="Aurevia home"><span class="brand-name">AUREVIA<span class="brand-dot">.</span></span><span class="brand-tagline">Your space, Your future</span></a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+            <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+                <a href="#homes">Explore</a>
+                <a href="#search" data-purpose-link="sale">Buy</a>
+                <a href="#search" data-purpose-link="rent">Rent</a>
+                <a href="#owners">List your property</a>
+            </nav>
+            <div class="nav-actions"><a class="nav-search" href="#search" aria-label="Go to property search"><span aria-hidden="true"></span></a><a class="text-button" href="account.html#login">Log in</a><a class="button button-dark button-small" href="account.html#register">Get started</a></div>
+        </div>
+    </header>
+    <main id="main">
+        <section class="hero" id="home" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">Real estate, reimagined</p>
+                <h1 id="hero-title">Your space,<br><em>Your future.</em></h1>
+                <p class="hero-intro">Discover exceptional homes and property opportunities across Nigeria.</p>
+            </div>
+            <div class="hero-visual"><img src="estate 5.avif" alt="Modern white architectural home at dusk" fetchpriority="high"><div class="image-caption"><span class="caption-rule"></span><span>Thoughtful living. Timeless spaces.</span></div></div>
+            <section class="search-section" id="search" aria-label="Search properties">
+            <form class="search-form" id="property-search">
+                <input type="hidden" name="purpose" value="sale">
+                <div class="purpose-tabs" role="group" aria-label="Transaction purpose">
+                    <button type="button" class="is-active" data-search-purpose="sale" aria-pressed="true">Buy</button>
+                    <button type="button" data-search-purpose="rent" aria-pressed="false">Rent</button>
+                    <button type="button" data-search-purpose="short-let" aria-pressed="false">Short-let</button>
+                </div>
+                <div class="search-controls">
+                    <label class="field field-location"><span class="field-symbol" aria-hidden="true">⌖</span><span class="field-copy"><span>Location</span><input type="search" name="location" placeholder="City, state or neighbourhood" autocomplete="off"></span></label>
+                    <label class="field field-type"><span class="field-symbol" aria-hidden="true">⌂</span><span class="field-copy"><span>Property type</span><select name="type"><option value="">All types</option><option value="house">House</option><option value="apartment">Apartment</option><option value="land">Land</option><option value="commercial">Commercial</option><option value="other">Other</option></select></span></label>
+                    <div class="field field-price"><span class="field-symbol" aria-hidden="true">◉</span><span class="field-copy"><span>Price range</span><span class="price-inputs"><input type="number" name="minPrice" min="0" inputmode="numeric" placeholder="Min" aria-label="Minimum price in naira"><span aria-hidden="true">–</span><input type="number" name="maxPrice" min="0" inputmode="numeric" placeholder="Max" aria-label="Maximum price in naira"></span></span></div>
+                    <button class="search-button" type="submit"><span aria-hidden="true">⌕</span> Search properties</button>
+                </div>
+            </form>
+            <p class="search-feedback" id="search-feedback" role="status" aria-live="polite"></p>
+            </section>
+            <p class="hero-review"><span aria-hidden="true">✧</span> Every listing reviewed before publication</p>
+        </section>
+        <section class="discover-section" id="homes" aria-labelledby="discover-title">
+            <div class="section-heading"><div class="discover-title"><span class="heading-rule" aria-hidden="true"></span><h2 id="discover-title">Find a place that feels like yours</h2></div><div class="results-toolbar" aria-label="Property filters"><button type="button" data-focus-field="location"><span aria-hidden="true">⌖</span> Location <span class="filter-chevron" aria-hidden="true">⌄</span></button><button type="button" data-focus-field="type"><span aria-hidden="true">⌂</span> Property type <span class="filter-chevron" aria-hidden="true">⌄</span></button><button type="button" data-focus-field="minPrice"><span aria-hidden="true">◉</span> Price range <span class="filter-chevron" aria-hidden="true">⌄</span></button></div></div>
+            <div class="listings-empty" id="listings-empty"><div class="empty-art" aria-hidden="true"><span class="empty-sun"></span><span class="empty-roof"></span><span class="empty-ground"></span></div><p class="eyebrow">A new chapter is taking shape</p><h3>Good places take a little time.</h3><p>There are no approved properties to show just yet. Check back soon, or be among the first to share a place.</p><a class="button button-outline" href="#owners">List a property <span aria-hidden="true">↗</span></a></div>
+        </section>
+        <section class="owners-section" id="owners" aria-labelledby="owners-title">
+            <div class="owners-image"><img src="estate 3.webp" alt="Contemporary villa beside a reflecting pool" loading="lazy"></div>
+            <div class="owners-copy"><h2 id="owners-title">Have a property to share?</h2><p>List your property with Aurevia and reach qualified buyers and renters across Nigeria.</p><a class="button button-light" href="account.html#register">List with Aurevia <span aria-hidden="true">→</span></a></div>
+        </section>
+        <section class="how-section" id="how-it-works" aria-labelledby="how-title">
+            <div class="how-intro"><p class="eyebrow">The Aurevia way</p><h2 id="how-title">A better move,<br><em>from the start.</em></h2><p>Finding your next place should feel clear, considered, and entirely your own.</p></div>
+            <div class="steps">
+                <article class="step"><span class="step-number">01</span><h3>Explore with intention</h3><p>Search by the things that matter to you: where you want to be, what you need, and how you want to live.</p></article>
+                <article class="step"><span class="step-number">02</span><h3>Meet the people behind it</h3><p>When a place feels right, connect with its owner or agent to ask questions and arrange a viewing.</p></article>
+                <article class="step"><span class="step-number">03</span><h3>Make your next move</h3><p>Found somewhere to share? Submit your property for review and help someone else find their place.</p></article>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <div class="footer-main"><div class="footer-brand-block"><a class="brand brand-footer" href="#home" aria-label="Aurevia home"><span class="brand-name">AUREVIA<span class="brand-dot">.</span></span></a><p>Your space, Your future.</p></div>
+            <div class="footer-links"><div><p class="footer-label">Discover</p><a href="#homes">Explore homes</a><a href="#search" data-purpose-link="sale">Buy a property</a><a href="#search" data-purpose-link="rent">Rent a property</a></div><div><p class="footer-label">Aurevia</p><a href="#how-it-works">How it works</a><a href="#owners">List your property</a><a href="#home">Back to top ↑</a></div><div><p class="footer-label">Get in touch</p><span class="footer-muted">Contact details coming soon</span></div></div>
+        </div>
+        <div class="footer-bottom"><span>© <span id="current-year"></span> Aurevia</span><span>Made for finding your place in Nigeria.</span><span class="footer-legal">Privacy &nbsp;·&nbsp; Terms</span></div>
+    </footer>
+    <div class="toast" id="site-toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

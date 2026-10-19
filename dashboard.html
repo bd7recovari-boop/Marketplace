@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#173b31">
+    <title>My listings | Aurevia</title>
+    <link rel="stylesheet" href="aurevia.css">
+    <link rel="stylesheet" href="app.css">
+    <script type="module" src="js/dashboard-page.js"></script>
+</head>
+<body class="app-body">
+    <a class="skip-link" href="#dashboard-main">Skip to content</a>
+    <header class="app-header"><a class="brand" href="index.html" aria-label="Aurevia home"><span class="brand-name">AUREVIA<span class="brand-dot">.</span></span><span class="brand-tagline">Your space, Your future</span></a><div class="dashboard-actions"><a class="app-back-link" href="index.html">Marketplace</a><button class="dashboard-button secondary" id="sign-out" type="button">Sign out</button></div></header>
+    <main class="dashboard-shell" id="dashboard-main">
+        <div class="dashboard-heading"><div><p class="eyebrow">Your Aurevia</p><h1>My listings</h1></div><div class="dashboard-actions"><button class="dashboard-button" type="button" id="new-listing">Submit a property</button><button class="dashboard-button secondary" type="button" id="edit-profile">Edit profile</button></div></div>
+        <p class="app-message" id="dashboard-message" role="status" aria-live="polite" hidden></p>
+        <section class="form-panel" id="profile-panel" hidden aria-labelledby="profile-form-title">
+            <h2 id="profile-form-title">Your profile</h2>
+            <p>Your account type is fixed for this account. Keep your contact details current for property review.</p>
+            <form class="listing-form" id="profile-form">
+                <label>Your name<input name="display_name" maxlength="100" required></label>
+                <label>Phone number<input name="phone" type="tel" maxlength="30" required></label>
+                <label class="wide checkbox-row"><input name="allow_public_contact" type="checkbox"><span>Show my phone number to visitors on my approved listings</span></label>
+                <div class="wide dashboard-actions"><button class="dashboard-button" type="submit">Save profile</button><button class="dashboard-button secondary" type="button" id="cancel-profile">Cancel</button></div>
+            </form>
+        </section>
+        <section class="form-panel" id="listing-panel" hidden aria-labelledby="listing-form-title">
+            <h2 id="listing-form-title">Share a property</h2>
+            <p>Your listing stays private until an Aurevia administrator has reviewed it and supporting documents.</p>
+            <form class="listing-form" id="listing-form">
+                <label>Property title<input name="title" minlength="8" maxlength="140" required></label>
+                <label>Property type<select name="property_type" required><option value="house">House</option><option value="apartment">Apartment</option><option value="land">Land</option><option value="commercial">Commercial</option><option value="other">Other</option></select></label>
+                <label>Purpose<select name="purpose" required><option value="sale">For sale</option><option value="rent">For rent</option><option value="short-let">Short-let</option></select></label>
+                <label>Price (NGN)<input name="price" type="number" min="1" step="1" required></label>
+                <label>State<input name="state" minlength="2" maxlength="100" required></label>
+                <label>City<input name="city" minlength="2" maxlength="100" required></label>
+                <label>Area / neighbourhood<input name="area" maxlength="120"></label>
+                <label>Full property address<input name="address" minlength="8" maxlength="300" required><span class="hint">Private: only you and authorized reviewers can see this exact address.</span></label>
+                <label>Bedrooms<input name="bedrooms" type="number" min="0" max="100"></label>
+                <label>Bathrooms<input name="bathrooms" type="number" min="0" max="100"></label>
+                <label>Size (m²)<input name="size_sqm" type="number" min="1" step="0.01"></label>
+                <label>Amenities, comma-separated<input name="amenities" maxlength="500" placeholder="Parking, garden, security"></label>
+                <label class="wide">Description<textarea name="description" minlength="30" maxlength="6000" required></textarea></label>
+                <div class="wide"><span class="listing-label">Existing property photos</span><div class="existing-media" id="existing-images"></div></div>
+                <label class="wide">Add property photos<input name="images" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple required><span class="hint">Up to 10 total photos, 10 MB each. Photos are resized and re-encoded as WebP to remove embedded location metadata.</span></label>
+                <div class="wide"><span class="listing-label">Existing verification documents</span><div class="existing-media" id="existing-documents"></div></div>
+                <label>Ownership / authority evidence<select name="document_type" required><option value="ownership-proof">Proof of ownership</option><option value="right-to-list">Authority to list (agents)</option></select></label>
+                <label>Upload ownership / authority document<input name="document" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required><span class="hint">Private: PDF or image, up to 15 MB.</span></label>
+                <label>Location evidence type<select name="location_document_type" required><option value="survey-plan">Survey plan</option><option value="address-proof">Address proof</option></select></label>
+                <label>Upload location evidence<input name="location_document" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required><span class="hint">Separate proof used to verify the actual property location, up to 15 MB.</span></label>
+                <div class="wide"><p class="listing-error" id="listing-error" role="alert" hidden></p></div>
+                <div class="wide dashboard-actions"><button class="dashboard-button" type="submit">Submit for review</button><button class="dashboard-button secondary" type="button" id="cancel-listing">Cancel</button></div>
+            </form>
+        </section>
+        <section class="dashboard-section" aria-labelledby="listing-table-title"><h2 id="listing-table-title">Listing activity</h2><div class="dashboard-table-wrap"><table class="dashboard-table"><thead><tr><th>Property</th><th>Location</th><th>Purpose</th><th>Status</th><th>Submitted</th><th>Next step</th></tr></thead><tbody id="listing-rows"><tr><td class="empty-row" colspan="6">Loading your listings…</td></tr></tbody></table></div></section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#173b31">
+    <title>Review desk | Aurevia</title>
+    <link rel="stylesheet" href="aurevia.css">
+    <link rel="stylesheet" href="app.css">
+    <script type="module" src="js/admin-page.js"></script>
+</head>
+<body class="app-body">
+    <a class="skip-link" href="#admin-main">Skip to content</a>
+    <header class="app-header"><a class="brand" href="index.html" aria-label="Aurevia home"><span class="brand-name">AUREVIA<span class="brand-dot">.</span></span><span class="brand-tagline">Private review workspace</span></a><div class="dashboard-actions"><a class="app-back-link" href="dashboard.html">My listings</a><button class="dashboard-button secondary" id="admin-sign-out" type="button">Sign out</button></div></header>
+    <main class="dashboard-shell" id="admin-main">
+        <div class="dashboard-heading"><div><p class="eyebrow">Restricted access</p><h1>Review desk</h1></div><button class="dashboard-button secondary" id="refresh-admin" type="button">Refresh queue</button></div>
+        <p class="app-message" id="admin-message" role="status" aria-live="polite">Checking administrator access…</p>
+        <section class="stats-grid" id="admin-stats" aria-label="Marketplace totals" hidden></section>
+        <section class="dashboard-section"><h2>Property review queue</h2><div class="review-grid" id="review-queue"><p class="dashboard-loader">Loading authorized review queue…</p></div></section>
+        <section class="dashboard-section"><h2>Users</h2><div class="dashboard-table-wrap"><table class="dashboard-table"><thead><tr><th>Name</th><th>Email</th><th>Account type</th><th>Joined</th><th>Account</th><th>Action</th></tr></thead><tbody id="user-rows"><tr><td class="empty-row" colspan="6">Loading administrator data…</td></tr></tbody></table></div></section>
+    </main>
+</body>
+</html>
