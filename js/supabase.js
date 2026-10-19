@@ -5,11 +5,10 @@ async function readConfig() {
     if (!isLocal) {
         try {
             const response = await fetch('/api/config', { cache: 'no-store' });
-            if (response.ok) {
-                return await response.json();
-            }
+            if (!response.ok) return null;
+            return await response.json();
         } catch {
-            // Fall back to ignored local config if the deployment function is unavailable.
+            return null;
         }
     }
 
