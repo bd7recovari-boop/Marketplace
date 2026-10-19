@@ -127,8 +127,9 @@ if (!supabase) {
         }
     });
     try {
-        const { user } = await getCurrentUser();
-        if (user && !recoveryMode) window.location.assign('dashboard.html');
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (data.session?.user && !recoveryMode) window.location.assign('dashboard.html');
     } catch (error) {
         showMessage(message, error.message, 'error');
     }
