@@ -7,13 +7,13 @@ export async function getCurrentUser() {
     return { supabase, user: data.user };
 }
 
-export async function signUp({ email, password, displayName, phone, accountType }) {
+export async function signUp({ email, password, displayName, surname, phone, accountType }) {
     const supabase = await requireSupabase();
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            data: { display_name: displayName, phone, account_type: accountType }
+            data: { display_name: displayName, surname, phone, account_type: accountType }
         }
     });
     if (error) throw error;

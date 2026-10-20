@@ -19,7 +19,8 @@
             <h2 id="profile-form-title">Your profile</h2>
             <p>Your account type is fixed for this account. Keep your contact details current for property review.</p>
             <form class="listing-form" id="profile-form">
-                <label>Your name<input name="display_name" maxlength="100" required></label>
+                <label>First name<input name="display_name" autocomplete="given-name" maxlength="80" required></label>
+                <label>Surname<input name="surname" autocomplete="family-name" maxlength="80" required></label>
                 <label>Phone number<input name="phone" type="tel" maxlength="30" required></label>
                 <label class="wide checkbox-row"><input name="allow_public_contact" type="checkbox"><span>Show my phone number to visitors on my approved listings</span></label>
                 <div class="wide dashboard-actions"><button class="dashboard-button" type="submit">Save profile</button><button class="dashboard-button secondary" type="button" id="cancel-profile">Cancel</button></div>

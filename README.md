@@ -5,7 +5,7 @@ Aurevia is a vanilla HTML/CSS/JavaScript frontend backed by Supabase Auth, Postg
 ## Supabase setup
 
 1. Create a Supabase project and keep its database password private.
-2. In the Supabase SQL Editor, run `supabase/migrations/001_marketplace.sql` once. This creates the profile/listing/review tables, RLS policies, review RPCs, and two private Storage buckets.
+2. In the Supabase SQL Editor, run the migrations in order: `supabase/migrations/001_marketplace.sql`, then `supabase/migrations/002_profile_surname.sql`. The first creates the profile/listing/review tables, RLS policies, review RPCs, and private Storage buckets; the second adds surname support to existing profiles and auth flows.
 3. In Authentication settings, configure the site URL and redirect URLs for your local URL and production domain. Enable email verification before production.
 4. In Authentication → Emails → SMTP Settings, configure a verified custom sender (for example, Resend) before expecting verification emails to reach ordinary users. Supabase's default SMTP is for testing, is rate-limited, and only delivers to project team addresses. Set the provider host, port, username, password, and a sender address on your verified domain in Supabase; do not put SMTP credentials in the website or GitHub. Verify the provider's SPF/DKIM instructions and test a confirmation email.
 5. Run the site, create your own account, then promote that account to administrator in the SQL Editor:

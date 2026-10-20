@@ -290,6 +290,7 @@ document.querySelector('#edit-profile').addEventListener('click', () => {
     profilePanel.hidden = false;
     listingPanel.hidden = true;
     profileForm.elements.display_name.value = profile.display_name ?? '';
+    profileForm.elements.surname.value = profile.surname ?? '';
     profileForm.elements.phone.value = profile.phone ?? '';
     profileForm.elements.allow_public_contact.checked = profile.allow_public_contact;
     profilePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -302,6 +303,7 @@ profileForm.addEventListener('submit', async (event) => {
     try {
         const { error } = await supabase.from('profiles').update({
             display_name: profileForm.elements.display_name.value.trim(),
+            surname: profileForm.elements.surname.value.trim(),
             phone: profileForm.elements.phone.value.trim(),
             allow_public_contact: profileForm.elements.allow_public_contact.checked
         }).eq('id', currentUser.id);
@@ -309,6 +311,7 @@ profileForm.addEventListener('submit', async (event) => {
         profile = {
             ...profile,
             display_name: profileForm.elements.display_name.value.trim(),
+            surname: profileForm.elements.surname.value.trim(),
             phone: profileForm.elements.phone.value.trim(),
             allow_public_contact: profileForm.elements.allow_public_contact.checked
         };
@@ -334,7 +337,7 @@ async function initialize() {
             window.location.replace('account.html#login');
             return;
         }
-        const { data, error } = await supabase.from('profiles').select('id, display_name, phone, allow_public_contact, account_type, is_suspended').eq('id', currentUser.id).single();
+        const { data, error } = await supabase.from('profiles').select('id, display_name, surname, phone, allow_public_contact, account_type, is_suspended').eq('id', currentUser.id).single();
         if (error) throw error;
         profile = data;
         if (profile.is_suspended) {

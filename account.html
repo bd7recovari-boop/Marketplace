@@ -26,7 +26,8 @@
                     <button class="account-text-action" type="button" id="forgot-password">Forgot your password?</button>
                 </form>
                 <form id="register-form" class="account-form" data-panel="register" hidden>
-                    <label>Your name<input name="displayName" type="text" autocomplete="name" maxlength="100" required></label>
+                    <label>First name<input name="displayName" type="text" autocomplete="given-name" maxlength="80" required></label>
+                    <label>Surname<input name="surname" type="text" autocomplete="family-name" maxlength="80" required></label>
                     <label>Phone number<input name="phone" type="tel" autocomplete="tel" maxlength="30" required></label>
                     <label>Account type<select name="accountType" required><option value="buyer">Buyer</option><option value="renter">Renter</option><option value="owner">Property owner</option><option value="agent">Real estate agent</option></select></label>
                     <label>Email address<input name="email" type="email" autocomplete="email" required></label>

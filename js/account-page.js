@@ -61,6 +61,7 @@ document.querySelector('#register-form').addEventListener('submit', async (event
             email: form.elements.email.value.trim(),
             password: form.elements.password.value,
             displayName: form.elements.displayName.value.trim(),
+            surname: form.elements.surname.value.trim(),
             phone: form.elements.phone.value.trim(),
             accountType: form.elements.accountType.value
         });
