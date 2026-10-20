@@ -1,5 +1,5 @@
 import { getSupabase } from './supabase.js';
-import { getCurrentUser, sendPasswordReset, signIn, signUp } from './auth.js';
+import { getCurrentUser, resendVerification, sendPasswordReset, signIn, signUp } from './auth.js';
 import { showMessage } from './ui.js';
 
 const tabs = document.querySelectorAll('[data-mode]');
@@ -64,11 +64,32 @@ document.querySelector('#register-form').addEventListener('submit', async (event
             phone: form.elements.phone.value.trim(),
             accountType: form.elements.accountType.value
         });
+        form.elements.password.value = '';
         if (result.session) {
             window.location.assign('dashboard.html');
             return;
         }
-        showMessage(message, 'Check your email to verify your address, then return here to log in.', 'success');
+        document.querySelector('#resend-verification').hidden = false;
+        showMessage(message, 'Account created. Check your inbox and spam folder for a verification email. If it does not arrive, try resending or check the project email settings.', 'success');
+    } catch (error) {
+        showMessage(message, error.message, 'error');
+    } finally {
+        button.disabled = false;
+    }
+});
+
+document.querySelector('#resend-verification').addEventListener('click', async (event) => {
+    const email = document.querySelector('#register-form').elements.email.value.trim();
+    const button = event.currentTarget;
+    if (!email) {
+        showMessage(message, 'Enter the email address you used to register.', 'error');
+        return;
+    }
+    button.disabled = true;
+    showMessage(message, 'Requesting a verification email…');
+    try {
+        await resendVerification(email);
+        showMessage(message, 'If email confirmation is still required, a verification email has been requested. Check your inbox and spam folder.', 'success');
     } catch (error) {
         showMessage(message, error.message, 'error');
     } finally {

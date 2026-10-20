@@ -39,3 +39,14 @@ export async function sendPasswordReset(email) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
     if (error) throw error;
 }
+
+export async function resendVerification(email) {
+    const supabase = await requireSupabase();
+    const redirectTo = new URL('account.html', window.location.href).href;
+    const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: { emailRedirectTo: redirectTo }
+    });
+    if (error) throw error;
+}

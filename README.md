@@ -7,14 +7,15 @@ Aurevia is a vanilla HTML/CSS/JavaScript frontend backed by Supabase Auth, Postg
 1. Create a Supabase project and keep its database password private.
 2. In the Supabase SQL Editor, run `supabase/migrations/001_marketplace.sql` once. This creates the profile/listing/review tables, RLS policies, review RPCs, and two private Storage buckets.
 3. In Authentication settings, configure the site URL and redirect URLs for your local URL and production domain. Enable email verification before production.
-4. Run the site, create your own account, then promote that account to administrator in the SQL Editor:
+4. In Authentication → Emails → SMTP Settings, configure a verified custom sender (for example, Resend) before expecting verification emails to reach ordinary users. Supabase's default SMTP is for testing, is rate-limited, and only delivers to project team addresses. Set the provider host, port, username, password, and a sender address on your verified domain in Supabase; do not put SMTP credentials in the website or GitHub. Verify the provider's SPF/DKIM instructions and test a confirmation email.
+5. Run the site, create your own account, then promote that account to administrator in the SQL Editor:
 
 ```sql
 insert into public.admin_users (user_id)
 select id from auth.users where email = 'your-admin-email@example.com';
 ```
 
-5. Configure the frontend with the **project URL** and **publishable/anon key only**. Never place a service-role key in browser code or `js/config.local.js`.
+6. Configure the frontend with the **project URL** and **publishable/anon key only**. Never place a service-role key in browser code or `js/config.local.js`.
 
 For local development, set the two exported values in the ignored `js/config.local.js` file. For Vercel, set `SUPABASE_URL` and `SUPABASE_ANON_KEY` as project environment variables; `/api/config` exposes only those public values to the frontend.
 
