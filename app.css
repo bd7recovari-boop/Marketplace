@@ -26,7 +26,6 @@
 .account-submit { min-height: 44px; margin-top: 3px; padding: 0 14px; display: flex; align-items: center; justify-content: space-between; border: 0; background: #173b31; color: white; font-size: 11px; font-weight: 600; cursor: pointer; }
 .account-submit:hover { background: #102d26; }
 .account-text-action { align-self: flex-start; padding: 2px 0; border: 0; background: transparent; color: #52665b; font-size: 10px; text-decoration: underline; cursor: pointer; }
-.account-resend { margin-top: 12px; }
 .account-footnote { margin: 18px 0 0; color: #7a827b; font-size: 9px; line-height: 1.5; }
 .app-message { margin: 16px 0 0; padding: 10px 12px; border-left: 2px solid #b99a5a; background: #f4f2ea; color: #34483e; font-size: 10px; line-height: 1.6; }
 .app-message[data-kind='error'] { border-left-color: #ae5144; background: #fbefec; color: #7f3028; }

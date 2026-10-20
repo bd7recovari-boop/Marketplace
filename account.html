@@ -32,13 +32,13 @@
                     <label>Email address<input name="email" type="email" autocomplete="email" required></label>
                     <label>Password<input name="password" type="password" autocomplete="new-password" minlength="10" required><small>Use at least 10 characters.</small></label>
                     <button class="account-submit" type="submit">Create account <span aria-hidden="true">→</span></button>
+                    <button class="account-text-action" type="button" id="resend-verification">Resend verification email</button>
                 </form>
                 <form id="recovery-form" class="account-form" hidden>
                     <label>New password<input name="password" type="password" autocomplete="new-password" minlength="10" required></label>
                     <button class="account-submit" type="submit">Update password <span aria-hidden="true">→</span></button>
                 </form>
                 <p class="app-message" id="account-message" role="status" aria-live="polite" hidden></p>
-                <button class="account-text-action account-resend" type="button" id="resend-verification" hidden>Resend verification email</button>
                 <p class="account-footnote">Aurevia never stores your password in its property database.</p>
             </div>
         </section>

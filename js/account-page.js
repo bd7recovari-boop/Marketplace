@@ -69,7 +69,6 @@ document.querySelector('#register-form').addEventListener('submit', async (event
             window.location.assign('dashboard.html');
             return;
         }
-        document.querySelector('#resend-verification').hidden = false;
         showMessage(message, 'Account created. Check your inbox and spam folder for a verification email. If it does not arrive, try resending or check the project email settings.', 'success');
     } catch (error) {
         showMessage(message, error.message, 'error');
