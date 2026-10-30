@@ -43,17 +43,20 @@ The app enforces submission status, ownership, admin permissions, private docume
 
 This is a static HTML/CSS/JavaScript project; Vercel serves the HTML files directly and deploys `api/config.js` as a serverless function. No frontend build command or output directory is needed. `vercel.json` adds basic browser security headers.
 
-The current workspace has no Git repository/remote and no Vercel CLI, so it has not been published from this machine. To deploy through the Vercel dashboard:
+To deploy through the Vercel dashboard:
 
-1. Create a GitHub repository and push this project. `.gitignore` already excludes `js/config.local.js` and environment files.
-2. In Vercel, choose **Add New → Project**, import that repository, and keep the root directory as `./`.
-3. Choose **Other** as the framework preset. Leave the build/install commands blank and set the output directory to `.` if Vercel asks for one.
-4. In Project Settings → Environment Variables, add `SUPABASE_URL` and `SUPABASE_ANON_KEY` for Production, Preview, and Development as appropriate. Use the Supabase project URL and publishable/anon key only. Never add the service-role key.
-5. Deploy, then visit `https://YOUR-DOMAIN/api/config`. A successful response contains only the public project URL and anon key; a 503 means an environment variable is missing. Redeploy after changing environment variables.
-6. In Supabase Authentication → URL Configuration, set the Site URL to the production domain and allow `https://YOUR-DOMAIN/account.html` as a redirect URL. Add your localhost URL and any preview URLs you intend to use.
-7. Register your administrator account, then add its user ID to `public.admin_users` using the SQL statement in the Supabase setup section.
+1. In Vercel, choose **Add New → Project** and import `bd7recovari-boop/Marketplace`. Set the Vercel project name to `Aurevia`; if the project already exists, change it under **Project Settings → General → Project Name**. Keep the root directory as `./`.
+2. Choose **Other** as the framework preset. Leave the build/install commands blank and set the output directory to `.` if Vercel asks for one.
+3. In Project Settings → Environment Variables, add `SUPABASE_URL` and `SUPABASE_ANON_KEY` for Production, Preview, and Development as appropriate. Use the Supabase project URL and publishable/anon key only. Never add the service-role key.
+4. Deploy, then visit `https://YOUR-DOMAIN/api/config`. A successful response contains only the public project URL and anon key; a 503 means an environment variable is missing. Redeploy after changing environment variables.
+5. In Supabase Authentication → URL Configuration, set the Site URL to the production domain and allow `https://YOUR-DOMAIN/account.html` as a redirect URL. Add your localhost URL and any preview URLs you intend to use.
+6. Register your administrator account, then add its user ID to `public.admin_users` using the SQL statement in the Supabase setup section.
 
 Verify the deployed home, account, dashboard, admin, and property routes. Until the Supabase migration and environment variables are configured, the app will show setup messages rather than accepting live submissions.
+
+## Continuous integration
+
+GitHub Actions checks JavaScript syntax and the Vercel JSON configuration, then starts an isolated local Supabase stack to apply and lint the migrations. These checks do not connect to a deployed Supabase project and need no Supabase credentials or `id-token: write` permission. Supabase's custom OIDC integration requires a JWT `role` claim; GitHub Actions OIDC tokens do not provide the claim Supabase needs for authenticated access.
 
 ## Security smoke tests
 

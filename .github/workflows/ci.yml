@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            node --input-type=module --check < "$file"
+          done < <(find . -type f -name '*.js' -not -path './.git/*' -print0)
+      - name: Validate Vercel configuration
+        run: python -m json.tool vercel.json > /dev/null
+
+  database:
+    name: Supabase migration checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 2.84.2
+      - name: Start local Supabase
+        id: supabase
+        run: supabase start
+      - name: Apply migrations to a clean database
+        run: supabase db reset --local
+      - name: Lint the database schema
+        run: supabase db lint --local --fail-on error
+      - name: Stop local Supabase
+        if: always() && steps.supabase.outcome == 'success'
+        run: supabase stop --no-backup
