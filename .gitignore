@@ -3,4 +3,5 @@
 !.env.example
 js/config.local.js
 .vercel/
+node_modules/
 desktop.ini

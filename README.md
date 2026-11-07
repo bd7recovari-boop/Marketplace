@@ -5,7 +5,7 @@ Aurevia is a vanilla HTML/CSS/JavaScript frontend backed by Supabase Auth, Postg
 ## Supabase setup
 
 1. Create a Supabase project and keep its database password private.
-2. In the Supabase SQL Editor, run the migrations in order: `supabase/migrations/001_marketplace.sql`, then `supabase/migrations/002_profile_surname.sql`. The first creates the profile/listing/review tables, RLS policies, review RPCs, and private Storage buckets; the second adds surname support to existing profiles and auth flows.
+2. In the Supabase SQL Editor, run `supabase/migrations/001_marketplace.sql`, `supabase/migrations/002_profile_surname.sql`, then `supabase/migrations/004_seller_identity_verification.sql`. The first creates the profile/listing/review tables, RLS policies, review RPCs, and private Storage buckets; the second adds surname support; the fourth adds seller identity verification and database-enforced listing gates.
 3. In Authentication settings, configure the site URL and redirect URLs for your local URL and production domain. Enable email verification before production.
 4. In Authentication → Emails → SMTP Settings, configure a verified custom sender (for example, Resend) before expecting verification emails to reach ordinary users. Supabase's default SMTP is for testing, is rate-limited, and only delivers to project team addresses. Set the provider host, port, username, password, and a sender address on your verified domain in Supabase; do not put SMTP credentials in the website or GitHub. Verify the provider's SPF/DKIM instructions and test a confirmation email.
 5. Run the site, create your own account, then promote that account to administrator in the SQL Editor:
@@ -18,6 +18,8 @@ select id from auth.users where email = 'your-admin-email@example.com';
 6. Configure the frontend with the **project URL** and **publishable/anon key only**. Never place a service-role key in browser code or `js/config.local.js`.
 
 For local development, set the two exported values in the ignored `js/config.local.js` file. For Vercel, set `SUPABASE_URL` and `SUPABASE_ANON_KEY` as project environment variables; `/api/config` exposes only those public values to the frontend.
+
+Seller identity verification uses Dojah EasyOnboard. Configure a published flow with Nigerian NIN verification plus selfie liveness and face-match checks, then add these Vercel environment variables: `DOJAH_APP_ID`, `DOJAH_PUBLIC_KEY`, `DOJAH_WIDGET_ID`, `DOJAH_WEBHOOK_SECRET`, and `SUPABASE_SERVICE_ROLE_KEY`. The public config endpoint returns only the app ID, public key, and widget ID. Keep the webhook secret and Supabase service-role key server-side. The backend uses `@supabase/server` to apply the service-role RPC after validating Dojah's HMAC-SHA256 `x-dojah-signature`. Add a Dojah `kyc_widget` webhook subscription pointing to `https://YOUR-DOMAIN/api/dojah-webhook`; verified status is granted only when the terminal flow, NIN identifier, NIN step, and selfie/face-match step all succeed. Deploy the API on Node.js 22.x. Review Dojah's privacy terms, retention, processing locations, and data-processing agreement before handling real identity data.
 
 ## Run locally
 
@@ -41,7 +43,7 @@ The app enforces submission status, ownership, admin permissions, private docume
 
 ## Deployment
 
-This is a static HTML/CSS/JavaScript project; Vercel serves the HTML files directly and deploys `api/config.js` as a serverless function. No frontend build command or output directory is needed. `vercel.json` adds basic browser security headers.
+This is a static HTML/CSS/JavaScript project; Vercel serves the HTML files directly and deploys the files under `api/` as Node.js serverless functions. The `package.json` dependency is installed for the backend functions; no frontend build command or output directory is needed. `vercel.json` adds basic browser security headers.
 
 To deploy through the Vercel dashboard:
 

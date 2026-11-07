@@ -70,6 +70,10 @@
 .form-panel { margin: 20px 0 30px; padding: 22px; border: 1px solid #dedfd7; background: #fffefa; }
 .form-panel h2 { margin: 0 0 5px; color: #173b31; font: 500 24px 'Playfair Display', Georgia, serif; }
 .form-panel > p { margin: 0 0 17px; color: #68736b; font-size: 10px; line-height: 1.6; }
+.seller-verification-panel { max-width: 760px; }
+.verification-consent { margin: 14px 0; display: flex; align-items: flex-start; gap: 9px; color: #34483e; font-size: 10px; line-height: 1.6; }
+.verification-consent input { flex: 0 0 16px; width: 16px; height: 16px; margin: 1px 0 0; accent-color: #173b31; }
+.verification-status { color: #68736b; font-size: 10px; line-height: 1.6; }
 .listing-error { padding: 9px 11px; border-left: 2px solid #ae5144; background: #fbefec; color: #7f3028; font-size: 10px; }
 .listing-error[hidden] { display: none; }
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }

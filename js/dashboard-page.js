@@ -9,6 +9,10 @@ const listingForm = document.querySelector('#listing-form');
 const listingError = document.querySelector('#listing-error');
 const profilePanel = document.querySelector('#profile-panel');
 const profileForm = document.querySelector('#profile-form');
+const verificationPanel = document.querySelector('#seller-verification-panel');
+const verificationStatus = document.querySelector('#seller-verification-status');
+const startVerificationButton = document.querySelector('#start-seller-verification');
+const verificationConsent = document.querySelector('#seller-verification-consent');
 let supabase;
 let currentUser;
 let profile;
@@ -283,7 +287,101 @@ document.querySelector('#new-listing').addEventListener('click', () => {
         showMessage(dashboardMessage, 'Property submissions are available to property owners and real estate agents. Update your profile account type with support if this is incorrect.', 'error');
         return;
     }
+    if (profile.seller_verification_status !== 'verified') {
+        showMessage(dashboardMessage, 'Verify your identity before submitting a property.', 'error');
+        return;
+    }
     openNewListing();
+});
+
+function renderSellerVerification() {
+    const isSeller = ['owner', 'agent'].includes(profile?.account_type);
+    if (!isSeller) {
+        verificationPanel.hidden = true;
+        return;
+    }
+
+    const statusCopy = {
+        unverified: 'Identity verification is required before you can submit a listing.',
+        pending: 'Verification is processing. Refresh this status after completing the Dojah check.',
+        verified: 'Your seller identity is verified.',
+        failed: 'Verification was not successful. You can try again.'
+    };
+    const status = profile.seller_verification_status || 'unverified';
+    verificationStatus.textContent = statusCopy[status] || statusCopy.unverified;
+    verificationPanel.hidden = status === 'verified';
+    document.querySelector('#new-listing').hidden = status !== 'verified';
+    startVerificationButton.textContent = status === 'pending' ? 'Restart identity check' : 'Start identity check';
+}
+
+startVerificationButton.addEventListener('click', async () => {
+    if (!verificationConsent.checked) {
+        showMessage(dashboardMessage, 'Please consent to the identity check before continuing.', 'error');
+        return;
+    }
+    if (typeof window.Connect !== 'function') {
+        showMessage(dashboardMessage, 'The identity verification service did not load. Refresh the page and try again.', 'error');
+        return;
+    }
+
+    startVerificationButton.disabled = true;
+    try {
+        const configResponse = await fetch('/api/verification-config', { cache: 'no-store' });
+        const config = await configResponse.json();
+        if (!configResponse.ok) throw new Error(config.error || 'Identity verification is not configured yet.');
+
+        const { data: reference, error } = await supabase.rpc('start_seller_identity_verification', {
+            consent_confirmed: true
+        });
+        if (error) throw error;
+        profile.seller_verification_status = 'pending';
+        renderSellerVerification();
+
+        const connect = new window.Connect({
+            app_id: config.appId,
+            p_key: config.publicKey,
+            type: 'custom',
+            embed: false,
+            config: { widget_id: config.widgetId },
+            reference_id: reference,
+            user_data: {
+                first_name: profile.display_name,
+                last_name: profile.surname,
+                residence_country: 'NG',
+                email: currentUser.email
+            },
+            metadata: { user_id: currentUser.id },
+            onSuccess: () => showMessage(dashboardMessage, 'Check completed. Refresh verification status while Aurevia confirms the result.', 'success'),
+            onError: () => showMessage(dashboardMessage, 'The identity check could not be completed. You can try again.', 'error')
+        });
+        connect.setup();
+        connect.open();
+    } catch (error) {
+        showMessage(dashboardMessage, error.message, 'error');
+    } finally {
+        startVerificationButton.disabled = false;
+    }
+});
+
+document.querySelector('#refresh-seller-verification').addEventListener('click', async () => {
+    const button = document.querySelector('#refresh-seller-verification');
+    button.disabled = true;
+    try {
+        const { data, error } = await supabase.from('profiles')
+            .select('seller_verification_status')
+            .eq('id', currentUser.id)
+            .single();
+        if (error) throw error;
+        profile.seller_verification_status = data.seller_verification_status;
+        renderSellerVerification();
+        showMessage(dashboardMessage, data.seller_verification_status === 'verified'
+            ? 'Identity verified. You can now submit listings.'
+            : 'No completed verification was found yet.', data.seller_verification_status === 'verified' ? 'success' : 'info');
+    } catch (error) {
+        showMessage(dashboardMessage, error.message, 'error');
+    } finally {
+        button.disabled = false;
+    }
 });
 document.querySelector('#cancel-listing').addEventListener('click', () => { listingPanel.hidden = true; clearListingForm(); });
 document.querySelector('#edit-profile').addEventListener('click', () => {
@@ -337,7 +435,7 @@ async function initialize() {
             window.location.replace('account.html#login');
             return;
         }
-        const { data, error } = await supabase.from('profiles').select('id, display_name, surname, phone, allow_public_contact, account_type, is_suspended').eq('id', currentUser.id).single();
+        const { data, error } = await supabase.from('profiles').select('id, display_name, surname, phone, allow_public_contact, account_type, is_suspended, seller_verification_status').eq('id', currentUser.id).single();
         if (error) throw error;
         profile = data;
         if (profile.is_suspended) {
@@ -348,8 +446,9 @@ async function initialize() {
         if (!['owner', 'agent'].includes(profile.account_type)) {
             document.querySelector('#new-listing').hidden = true;
             showMessage(dashboardMessage, 'Your account is set up for browsing. Property submission is available to owners and agents.', 'info');
-        } else if (!profile.phone) {
-            showMessage(dashboardMessage, 'Add a contact phone in your profile before submitting a listing.', 'info');
+        } else {
+            renderSellerVerification();
+            if (!profile.phone) showMessage(dashboardMessage, 'Add a contact phone in your profile before submitting a listing.', 'info');
         }
         if (profile.account_type === 'agent') {
             listingForm.elements.document_type.value = 'right-to-list';

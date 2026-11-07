@@ -7,14 +7,22 @@
     <title>My listings | Aurevia</title>
     <link rel="stylesheet" href="aurevia.css">
     <link rel="stylesheet" href="app.css">
+    <script src="https://widget.dojah.io/widget.js"></script>
     <script type="module" src="js/dashboard-page.js"></script>
 </head>
 <body class="app-body">
     <a class="skip-link" href="#dashboard-main">Skip to content</a>
     <header class="app-header"><a class="brand" href="index.html" aria-label="Aurevia home"><span class="brand-name">AUREVIA<span class="brand-dot">.</span></span><span class="brand-tagline">Your space, Your future</span></a><div class="dashboard-actions"><a class="app-back-link" href="index.html">Marketplace</a><button class="dashboard-button secondary" id="sign-out" type="button">Sign out</button></div></header>
     <main class="dashboard-shell" id="dashboard-main">
-        <div class="dashboard-heading"><div><p class="eyebrow">Your Aurevia</p><h1>My listings</h1></div><div class="dashboard-actions"><button class="dashboard-button" type="button" id="new-listing">Submit a property</button><button class="dashboard-button secondary" type="button" id="edit-profile">Edit profile</button></div></div>
+        <div class="dashboard-heading"><div><p class="eyebrow">Your Aurevia</p><h1>My listings</h1></div><div class="dashboard-actions"><button class="dashboard-button" type="button" id="new-listing" hidden>Submit a property</button><button class="dashboard-button secondary" type="button" id="edit-profile">Edit profile</button></div></div>
         <p class="app-message" id="dashboard-message" role="status" aria-live="polite" hidden></p>
+        <section class="form-panel seller-verification-panel" id="seller-verification-panel" hidden aria-labelledby="seller-verification-title">
+            <h2 id="seller-verification-title">Verify your identity</h2>
+            <p>Owners and agents must complete a Nigerian NIN, live selfie, and face-match check before submitting listings. Dojah processes the identity check; Aurevia stores the result, reference, and consent time. This confirms identity, not property ownership.</p>
+            <label class="verification-consent"><input type="checkbox" id="seller-verification-consent"><span>I consent to Dojah processing my identity information for seller verification.</span></label>
+            <p class="verification-status" id="seller-verification-status" role="status" aria-live="polite"></p>
+            <div class="dashboard-actions"><button class="dashboard-button" type="button" id="start-seller-verification">Start identity check</button><button class="dashboard-button secondary" type="button" id="refresh-seller-verification">Refresh status</button></div>
+        </section>
         <section class="form-panel" id="profile-panel" hidden aria-labelledby="profile-form-title">
             <h2 id="profile-form-title">Your profile</h2>
             <p>Your account type is fixed for this account. Keep your contact details current for property review.</p>
