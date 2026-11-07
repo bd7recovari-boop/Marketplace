@@ -1,5 +1,4 @@
 const crypto = require('node:crypto');
-const { createAdminClient } = require('@supabase/server/core');
 
 async function readRawBody(request) {
     const chunks = [];
@@ -70,6 +69,7 @@ async function handler(request, response) {
         && event.data?.selfie?.status === true;
 
     try {
+        const { createAdminClient } = require('@supabase/server/core');
         const supabaseAdmin = createAdminClient({
             env: {
                 url: supabaseUrl,
