@@ -29,7 +29,7 @@ export async function signIn(email, password) {
 
 export async function signOut() {
     const supabase = await requireSupabase();
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
 }
 
