@@ -513,13 +513,13 @@ html.motion-ready .hero-copy .eyebrow { animation: hero-line-in .8s .12s cubic-b
 html.motion-ready .hero-copy h1,
 html.motion-ready .hero-copy .hero-intro,
 html.motion-ready .hero-copy .hero-link,
-html.motion-ready .hero-copy .hero-review {
+html.motion-ready .hero-review {
 	animation: text-rise-in .85s cubic-bezier(.16,.66,.24,1) both;
 }
 html.motion-ready .hero-copy h1 { animation-delay: .08s; }
 html.motion-ready .hero-copy .hero-intro { animation-delay: .18s; }
 html.motion-ready .hero-copy .hero-link { animation-delay: .28s; }
-html.motion-ready .hero-copy .hero-review { animation-delay: .36s; }
+html.motion-ready .hero-review { animation-delay: .36s; }
 html.motion-ready .hero-visual img { animation: hero-image-in 1.5s cubic-bezier(.16,.66,.24,1) both; }
 .hero h1 em { position: relative; }
 .hero h1 em::after {
@@ -544,6 +544,9 @@ html.motion-ready .search-section { animation: search-in .9s .38s cubic-bezier(.
 .property-grid .property-card.reveal:nth-child(4) { transition-delay: .27s; }
 .property-grid .property-card.reveal:nth-child(5) { transition-delay: .36s; }
 .property-grid .property-card.reveal:nth-child(6) { transition-delay: .45s; }
+html.motion-ready .listings-empty.is-visible .empty-sun { animation: empty-sun-in .65s .12s cubic-bezier(.16,.66,.24,1) both; }
+html.motion-ready .listings-empty.is-visible .empty-roof { animation: empty-roof-in .7s .2s cubic-bezier(.16,.66,.24,1) both; }
+html.motion-ready .listings-empty.is-visible .empty-ground { animation: empty-ground-in .6s .32s cubic-bezier(.16,.66,.24,1) both; }
 .toast { animation: toast-in .38s cubic-bezier(.16,.66,.24,1) both; }
 
 @keyframes hero-copy-in {
@@ -571,7 +574,7 @@ html.motion-ready .search-section { animation: search-in .9s .38s cubic-bezier(.
 	100% { transform: scaleX(0); }
 }
 @keyframes search-in {
-	from { opacity: 0; transform: translateY(26px) scale(.96); }
+	from { opacity: 0; transform: translateY(-10px) scale(.96); }
 	to { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes header-in {
@@ -585,6 +588,18 @@ html.motion-ready .search-section { animation: search-in .9s .38s cubic-bezier(.
 @keyframes toast-in {
 	from { opacity: 0; transform: translateY(14px) scale(.96); }
 	to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes empty-sun-in {
+	from { opacity: 0; transform: translateY(7px) scale(.82); }
+	to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes empty-roof-in {
+	from { opacity: 0; transform: translateY(7px) rotate(45deg) skew(-8deg, -8deg); }
+	to { opacity: 1; transform: rotate(45deg) skew(-8deg, -8deg); }
+}
+@keyframes empty-ground-in {
+	from { transform: scaleX(0); }
+	to { transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -784,7 +799,7 @@ img { image-rendering: auto; }
 	}
 	.search-section {
 		left: 5.5%;
-		bottom: -38px;
+		bottom: -16px;
 		width: min(760px, 72%);
 		padding: 9px 10px 10px;
 		border-radius: 2px;
