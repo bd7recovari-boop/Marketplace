@@ -75,6 +75,12 @@ async function loadProperty() {
         const photo = document.createElement('img');
         photo.src = image.url;
         photo.alt = image.alt_text || property.title;
+        photo.loading = 'lazy';
+        photo.decoding = 'async';
+        photo.addEventListener('error', () => {
+            photo.src = 'estate 5.avif';
+            photo.alt = `${property.title} placeholder image`;
+        }, { once: true });
         gallery.append(photo);
     }
     if (!gallery.children.length) {
@@ -92,9 +98,11 @@ async function loadProperty() {
     if (contactInfo?.phone) {
         text(document.querySelector('#contact-name'), contactInfo.display_name || 'Property owner / agent');
         text(document.querySelector('#contact-phone'), contactInfo.phone);
-        const digits = contactInfo.phone.replace(/\D/g, '');
+        let digits = contactInfo.phone.replace(/\D/g, '');
+        if (digits.startsWith('0')) digits = `234${digits.slice(1)}`;
+        if (digits.length === 10) digits = `234${digits}`;
         const contactLink = document.querySelector('#contact-link');
-        contactLink.href = `https://wa.me/${digits}?text=${encodeURIComponent(`Hello, I am enquiring about ${property.title} on Aurevia.`)}`;
+        contactLink.href = `https://wa.me/${digits}?text=${encodeURIComponent(`Hello, I am enquiring about ${property.title} on Aurevia. ${window.location.href}`)}`;
     } else {
         document.querySelector('.property-contact').hidden = true;
     }
@@ -103,6 +111,24 @@ async function loadProperty() {
     message.hidden = true;
     const returnTo = `property.html?id=${encodeURIComponent(property.id)}`;
     document.querySelector('#report-sign-in-link').href = `account.html?returnTo=${encodeURIComponent(returnTo)}#login`;
+
+    const shareButton = document.querySelector('#property-share');
+    shareButton.addEventListener('click', async () => {
+        const shareData = { title: property.title, text: `${property.title} in ${[property.area, property.city, property.state].filter(Boolean).join(', ')}`, url: window.location.href };
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(window.location.href);
+                shareButton.textContent = 'Link copied';
+                window.setTimeout(() => { shareButton.textContent = 'Share listing'; }, 1800);
+            } else {
+                window.prompt('Copy this property link:', window.location.href);
+            }
+        } catch (error) {
+            if (error?.name !== 'AbortError') showMessage(message, 'This listing could not be shared. Copy the address from your browser instead.', 'error');
+        }
+    });
 }
 
 reportForm.addEventListener('submit', async (event) => {

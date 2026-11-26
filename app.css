@@ -127,6 +127,8 @@
 .property-detail-heading h1 { margin: 0 0 7px; color: #173b31; font: 500 clamp(30px, 4vw, 45px)/1.15 'Playfair Display', Georgia, serif; }
 .property-detail-heading p:not(.eyebrow) { margin: 0; color: #68736b; font-size: 11px; }
 .property-detail-price { color: #173b31; font-size: 19px; font-weight: 700; white-space: nowrap; }
+.property-detail-heading-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.property-share-button { min-height: 34px; }
 .property-gallery { max-height: 500px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(120px, 1fr); gap: 7px; overflow: hidden; background: #ecebe4; }
 .property-gallery img { width: 100%; height: 100%; min-height: 150px; max-height: 246px; display: block; object-fit: cover; }
 .property-gallery img:first-child { grid-column: span 2; grid-row: span 2; max-height: 500px; }
@@ -169,6 +171,7 @@
 @media (max-width: 700px) {
     .property-detail-shell { width: calc(100% - 32px); padding-top: 24px; }
     .property-detail-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .property-detail-heading-actions { width: 100%; align-items: flex-start; }
     .property-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: none; }
     .property-gallery img { min-height: 120px; max-height: 170px; }
     .property-gallery img:first-child { grid-row: auto; max-height: 210px; }

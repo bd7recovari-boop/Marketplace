@@ -9,10 +9,12 @@ export async function getCurrentUser() {
 
 export async function signUp({ email, password, displayName, surname, phone, accountType }) {
     const supabase = await requireSupabase();
+    const emailRedirectTo = new URL('account.html', window.location.href).href;
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+            emailRedirectTo,
             data: { display_name: displayName, surname, phone, account_type: accountType }
         }
     });
@@ -22,14 +24,14 @@ export async function signUp({ email, password, displayName, surname, phone, acc
 
 export async function signIn(email, password) {
     const supabase = await requireSupabase();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (error) throw error;
     return data;
 }
 
 export async function signOut() {
     const supabase = await requireSupabase();
-    const { error } = await supabase.auth.signOut({ scope: 'local' });
+    const { error } = await supabase.auth.signOut({ scope: 'global' });
     if (error) throw error;
 }
 

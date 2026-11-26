@@ -36,6 +36,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
     const form = event.currentTarget;
     const button = form.querySelector('[type="submit"]');
     button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
     showMessage(message, 'Signing in…');
     try {
         const result = await signIn(form.elements.email.value.trim(), form.elements.password.value);
@@ -57,6 +58,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
         showMessage(message, error.message, 'error');
     } finally {
         button.disabled = false;
+        button.removeAttribute('aria-busy');
     }
 });
 
@@ -65,6 +67,7 @@ document.querySelector('#register-form').addEventListener('submit', async (event
     const form = event.currentTarget;
     const button = form.querySelector('[type="submit"]');
     button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
     showMessage(message, 'Creating your account…');
     try {
         const result = await signUp({
@@ -85,6 +88,7 @@ document.querySelector('#register-form').addEventListener('submit', async (event
         showMessage(message, error.message, 'error');
     } finally {
         button.disabled = false;
+        button.removeAttribute('aria-busy');
     }
 });
 

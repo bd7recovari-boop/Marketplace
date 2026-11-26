@@ -63,6 +63,11 @@ function appendPropertyCard(property, image) {
 async function loadProperties(filters = {}) {
 	const sequence = ++searchSequence;
 	searchFeedback.textContent = 'Finding approved listings…';
+	const submitButton = searchForm.querySelector('[type="submit"]');
+	if (submitButton) {
+		submitButton.disabled = true;
+		submitButton.setAttribute('aria-busy', 'true');
+	}
 	emptyState.hidden = true;
 	let grid = document.querySelector('.property-grid');
 	if (!grid) {
@@ -95,9 +100,12 @@ async function loadProperties(filters = {}) {
 		if (!properties.length) {
 			grid.hidden = true;
 			emptyState.hidden = false;
-			emptyState.querySelector('h3').textContent = 'No approved homes to show yet.';
-			emptyState.querySelector('p:not(.eyebrow)').textContent = 'Approved listings will appear here after the Aurevia review team verifies the property and supporting evidence.';
-			searchFeedback.textContent = 'No approved properties match these filters.';
+			const hasFilters = Object.values(filters).some((value) => value !== null && value !== '' && value !== undefined);
+			emptyState.querySelector('h3').textContent = hasFilters ? 'No homes match these filters.' : 'No approved homes to show yet.';
+			emptyState.querySelector('p:not(.eyebrow)').textContent = hasFilters
+				? 'Try a broader location, property type, purpose, or price range.'
+				: 'Approved listings will appear here after the Aurevia review team verifies the property and supporting evidence.';
+			searchFeedback.textContent = hasFilters ? 'No approved properties match these filters.' : 'No approved properties are available yet.';
 			return;
 		}
 		const images = await getImages(properties.map((property) => property.id));
@@ -122,6 +130,15 @@ async function loadProperties(filters = {}) {
 		emptyState.querySelector('p:not(.eyebrow)').textContent = error.message;
 		grid.classList.remove('is-loading');
 		searchFeedback.textContent = 'Search could not be completed.';
+	} finally {
+		if (sequence === searchSequence) {
+			grid.classList.remove('is-loading');
+			const submitButton = searchForm.querySelector('[type="submit"]');
+			if (submitButton) {
+				submitButton.disabled = false;
+				submitButton.removeAttribute('aria-busy');
+			}
+		}
 	}
 }
 
@@ -130,6 +147,8 @@ menuToggle?.addEventListener('click', () => {
 	menuToggle.setAttribute('aria-expanded', String(!expanded));
 	menuToggle.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
 	primaryNav.classList.toggle('is-open', !expanded);
+	primaryNav.setAttribute('aria-hidden', String(expanded));
+	document.body.classList.toggle('mobile-nav-open', !expanded);
 });
 
 primaryNav?.addEventListener('click', (event) => {
@@ -137,6 +156,8 @@ primaryNav?.addEventListener('click', (event) => {
 		menuToggle.setAttribute('aria-expanded', 'false');
 		menuToggle.setAttribute('aria-label', 'Open navigation');
 		primaryNav.classList.remove('is-open');
+		primaryNav.setAttribute('aria-hidden', 'true');
+		document.body.classList.remove('mobile-nav-open');
 	}
 });
 
@@ -185,6 +206,17 @@ document.querySelectorAll('img[data-fallback]').forEach((image) => {
 		}
 	}, { once: true });
 });
+
+const scrollProgress = document.querySelector('#scroll-progress');
+if (scrollProgress) {
+	const updateScrollProgress = () => {
+		const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+		const progress = scrollable > 0 ? Math.min(1, window.scrollY / scrollable) : 0;
+		scrollProgress.style.transform = `scaleX(${progress})`;
+	};
+	window.addEventListener('scroll', updateScrollProgress, { passive: true });
+	updateScrollProgress();
+}
 
 const backToTop = document.querySelector('#back-to-top');
 if (backToTop) {
