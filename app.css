@@ -145,6 +145,16 @@
 .property-contact .dashboard-button { width: 100%; }
 .review-note-detail { margin: 12px 0 0; font-size: 9px !important; }
 #property-contact[hidden], .property-contact[hidden] { display: none; }
+.property-gallery img { transition: filter .25s ease, opacity .25s ease; }
+.property-gallery img:hover { filter: saturate(1.06) contrast(1.03); }
+.property-card-media.is-fallback {
+	background: linear-gradient(135deg, #dfe8e2, #f7f9f6);
+}
+.property-card-media.is-fallback::after {
+	position: absolute; inset: 0; display: grid; place-items: center;
+	color: #6d756f; content: 'AUREVIA'; font: 600 11px 'Playfair Display', Georgia, serif;
+	letter-spacing: 3px;
+}
 
 @media (max-width: 700px) {
     .property-detail-shell { width: calc(100% - 32px); padding-top: 24px; }

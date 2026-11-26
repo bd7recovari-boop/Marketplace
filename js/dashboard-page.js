@@ -414,6 +414,7 @@ profileForm.addEventListener('submit', async (event) => {
             allow_public_contact: profileForm.elements.allow_public_contact.checked
         };
         profilePanel.hidden = true;
+        renderSellerVerification();
         showMessage(dashboardMessage, 'Profile updated.', 'success');
     } catch (error) {
         showMessage(dashboardMessage, error.message, 'error');

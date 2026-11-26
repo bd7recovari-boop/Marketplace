@@ -22,6 +22,7 @@ function setPurpose(purpose) {
 function appendPropertyCard(property, image) {
 	const card = document.createElement('a');
 	card.className = 'property-card';
+	if (revealObserver) card.classList.add('reveal');
 	card.href = `property.html?id=${encodeURIComponent(property.id)}`;
 	const media = document.createElement('div');
 	media.className = 'property-card-media';
@@ -30,6 +31,11 @@ function appendPropertyCard(property, image) {
 		photo.src = image.url;
 		photo.alt = image.alt_text || property.title;
 		photo.loading = 'lazy';
+		photo.decoding = 'async';
+		photo.addEventListener('error', () => {
+			photo.hidden = true;
+			media.classList.add('is-fallback');
+		}, { once: true });
 		media.append(photo);
 	}
 	const badge = document.createElement('span');
@@ -66,6 +72,22 @@ async function loadProperties(filters = {}) {
 		listingContainer.insertBefore(grid, emptyState);
 	}
 	grid.replaceChildren();
+	grid.classList.add('is-loading');
+	for (let index = 0; index < 3; index += 1) {
+		const skeleton = document.createElement('div');
+		const media = document.createElement('div');
+		const body = document.createElement('div');
+		const title = document.createElement('div');
+		const location = document.createElement('div');
+		skeleton.className = 'property-card-skeleton';
+		media.className = 'property-card-skeleton-media';
+		body.className = 'property-card-skeleton-body';
+		title.className = 'property-card-skeleton-title';
+		location.className = 'property-card-skeleton-location';
+		body.append(title, location);
+		skeleton.append(media, body);
+		grid.append(skeleton);
+	}
 
 	try {
 		const properties = await searchProperties(filters);
@@ -84,7 +106,11 @@ async function loadProperties(filters = {}) {
 		for (const image of images) {
 			if (image.url && !firstImageByProperty.has(image.property_id)) firstImageByProperty.set(image.property_id, image);
 		}
+		grid.classList.remove('is-loading');
 		grid.append(...properties.map((property) => appendPropertyCard(property, firstImageByProperty.get(property.id))));
+		if (revealObserver) {
+			grid.querySelectorAll('.property-card.reveal').forEach((card) => revealObserver.observe(card));
+		}
 		grid.hidden = false;
 		emptyState.hidden = true;
 		searchFeedback.textContent = `${properties.length} approved ${properties.length === 1 ? 'property' : 'properties'} found.`;
@@ -94,6 +120,7 @@ async function loadProperties(filters = {}) {
 		emptyState.hidden = false;
 		emptyState.querySelector('h3').textContent = 'Property search is unavailable.';
 		emptyState.querySelector('p:not(.eyebrow)').textContent = error.message;
+		grid.classList.remove('is-loading');
 		searchFeedback.textContent = 'Search could not be completed.';
 	}
 }
@@ -150,6 +177,47 @@ document.querySelectorAll('[data-notice]').forEach((button) => {
 });
 
 document.querySelector('#current-year').textContent = new Date().getFullYear();
+
+document.querySelectorAll('img[data-fallback]').forEach((image) => {
+	image.addEventListener('error', () => {
+		if (image.dataset.fallback && image.src !== new URL(image.dataset.fallback, window.location.href).href) {
+			image.src = image.dataset.fallback;
+		}
+	}, { once: true });
+});
+
+const backToTop = document.querySelector('#back-to-top');
+if (backToTop) {
+	const updateBackToTop = () => {
+		backToTop.classList.toggle('is-visible', window.scrollY > 360);
+	};
+	window.addEventListener('scroll', updateBackToTop, { passive: true });
+	backToTop.addEventListener('click', () => {
+		window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+	});
+	updateBackToTop();
+}
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let revealObserver;
+
+if (!reduceMotion) {
+	document.documentElement.classList.add('motion-ready');
+	revealObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach((entry) => {
+			if (!entry.isIntersecting) return;
+			entry.target.classList.add('is-visible');
+			observer.unobserve(entry.target);
+		});
+	}, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+
+	document.querySelectorAll('.discover-title, .section-heading, .listings-empty, .how-intro, .step, .owners-image, .owners-copy')
+		.forEach((element) => {
+			element.classList.add('reveal');
+			revealObserver.observe(element);
+		});
+}
+
 const configuredSupabase = await getSupabase();
 if (configuredSupabase) {
 	await loadProperties();

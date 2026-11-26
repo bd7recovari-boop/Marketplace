@@ -23,6 +23,15 @@ async function loadProperty() {
     if (error) throw error;
     if (!property) throw new Error('This listing is unavailable or has not been approved for publication.');
 
+    document.title = `${property.title} | Aurevia`;
+    const setMeta = (selector, content) => {
+        const meta = document.querySelector(selector);
+        if (meta) meta.setAttribute('content', content);
+    };
+    setMeta('meta[name="description"]', `${property.title} in ${[property.area, property.city, property.state].filter(Boolean).join(', ')}. View this ${property.purpose} listing on Aurevia.`);
+    setMeta('meta[property="og:title"]', `${property.title} | Aurevia`);
+    setMeta('meta[property="og:description"]', `${property.property_type} in ${[property.area, property.city, property.state].filter(Boolean).join(', ')}.`);
+
     text(document.querySelector('#property-type-label'), `${property.property_type} · ${property.purpose}`);
     text(document.querySelector('#property-title'), property.title);
     text(document.querySelector('#property-location'), [property.area, property.city, property.state].filter(Boolean).join(', '));
@@ -52,6 +61,11 @@ async function loadProperty() {
     }
 
     const images = await getImages([property.id]);
+    const shareImage = images.find((image) => image.url)?.url;
+    if (shareImage) {
+        setMeta('meta[property="og:image"]', shareImage);
+        setMeta('meta[name="twitter:image"]', shareImage);
+    }
     const gallery = document.querySelector('#property-gallery');
     gallery.replaceChildren();
     for (const image of images) {
@@ -61,7 +75,14 @@ async function loadProperty() {
         photo.alt = image.alt_text || property.title;
         gallery.append(photo);
     }
-    if (!gallery.children.length) throw new Error('Approved listing photos are temporarily unavailable.');
+    if (!gallery.children.length) {
+        const fallback = document.createElement('img');
+        fallback.src = 'estate 5.avif';
+        fallback.alt = 'Aurevia property placeholder';
+        fallback.loading = 'eager';
+        fallback.decoding = 'async';
+        gallery.append(fallback);
+    }
 
     const { data: contact, error: contactError } = await supabase.rpc('public_property_contact', { target_property_id: property.id });
     if (contactError) throw contactError;
