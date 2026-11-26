@@ -149,7 +149,10 @@ document.querySelectorAll('[data-purpose-link]').forEach((link) => {
 document.querySelectorAll('[data-focus-field]').forEach((button) => {
 	button.addEventListener('click', () => {
 		const field = searchForm.elements.namedItem(button.dataset.focusField);
-		document.querySelector('#search').scrollIntoView({ behavior: 'smooth', block: 'center' });
+		document.querySelector('#search').scrollIntoView({
+			behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+			block: 'center'
+		});
 		field.focus({ preventScroll: true });
 	});
 });

@@ -428,6 +428,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero-visual { overflow: hidden; }
 .hero-visual img { transform: scale(1.015); }
 html.motion-ready .hero-copy { animation: hero-copy-in .75s cubic-bezier(.22,.75,.25,1) both; }
+html.motion-ready .hero-review { animation: hero-copy-in .75s .2s cubic-bezier(.22,.75,.25,1) both; }
 html.motion-ready .hero-visual img { animation: hero-image-in 1.1s cubic-bezier(.22,.75,.25,1) both; }
 html.motion-ready .hero-visual::after {
 	position: absolute; inset: 0; background: var(--ivory); content: ''; pointer-events: none;
@@ -459,7 +460,7 @@ html.motion-ready .search-section { animation: search-in .7s .28s cubic-bezier(.
 	to { transform: translateX(101%); }
 }
 @keyframes search-in {
-	from { opacity: 0; transform: translateY(12px); }
+	from { opacity: 0; transform: translateY(-10px) scale(.96); }
 	to { opacity: 1; transform: translateY(0); }
 }
 @keyframes header-in {
